@@ -64,31 +64,26 @@ class SeparateContractEnv(MultiAgentEnv):
         raw_obs, base_rew, dones, infos = self.base_env.step(acts)
         self.obs = {key: raw_obs[key] for key in acts.keys()}
 
-        transfers = self.contract.compute_transfer(self.obs, acts,base_rew, self.params, infos)
+        transfers,non_participating = self.contract.compute_transfer(self.obs, acts,base_rew, self.params, infos)
     
         rews = {key: base_rew[key] for key in acts.keys()}
 
         total_transfers = 0 
         for i in range(self.num_agents):
             if 'a' + str(i) in acts.keys():
-                # check proportions, default is even-division with integer transfer
-                if type(transfers['a' + str(i)]) is tuple:
-                    # of format (transfer_val, {id: proportion})
-                    rews['a' + str(i)] -= transfers['a' + str(i)][0]
-                    total_transfers += transfers['a' + str(i)][0] 
-                    for j in range(self.num_agents):
-                        if 'a' + str(j) in transfers['a' + str(i)][1].keys() and 'a'+str(j) in rews.keys():
-                            # pay the recipient agent the proportionate amount of the tranfer, weighted by the proportion dict
-                            rews['a' + str(j)] += transfers['a' + str(i)][0] * transfers['a' + str(i)][1]['a' + str(j)]
+                # assumed to be constant, be it integer, double, et
+                rews['a' + str(i)] -= transfers['a' + str(i)]
+                total_transfers += transfers['a' + str(i)] 
+                norm_factor = len(acts.keys()) - 1 - len(non_participating) 
+                if 'a' + str(i) in non_participating :
+                    norm_factor +=1 
+                if norm_factor==0:
+                    rews['a' + str(i)] += transfers['a' + str(i)]
                 else:
-                    # assumed to be constant, be it integer, double, et
-                    rews['a' + str(i)] -= transfers['a' + str(i)]
-                    total_transfers += transfers['a' + str(i)] 
                     for j in range(self.num_agents):
-                        if i != j and 'a' + str(j) in acts.keys():
+                        if i != j and 'a' + str(j) in acts.keys() and 'a' + str(j) not in non_participating:
                             # even distribution by default
-                            rews['a' + str(j)] += transfers['a' + str(i)] / (len(acts.keys()) - 1)
-
+                            rews['a' + str(j)] += transfers['a' + str(i)] / (norm_factor)
         self.base_env.metrics['transfers'] += total_transfers 
 
         for k,v in rews.items():

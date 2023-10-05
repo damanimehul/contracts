@@ -101,3 +101,61 @@ class SelfdriveContractDistprop(Contract):
                 transfers['a' + str(i)] = 0
         return transfers
 
+class HarvestNoise(Contract):
+    """
+    A contract space for a multi-agent Harvest environment.
+
+    Contracts are parameterized by theta in [0, 10]. When an agent eats an apple in a low-density region, defined as an apple having less than 4 neighboring apples within a radius of 5, they transfer theta to the other agents, which is equally distributed to the other agents.
+
+
+    Parameters:
+        num_agents (int): The number of agents in the environment.
+        low_val (float, optional): The lower bound for the transfer values. Default is 0.
+        high_val (float, optional): The upper bound for the transfer values. Default is 10.
+
+    """
+    def __init__(self, num_agents,low_val=0,high_val=10.0,alpha=0):
+        super().__init__(gym.spaces.Box(shape=(1,), low=low_val, high=high_val), np.array([0.0]), num_agents)
+        self.alpha = alpha
+
+    def compute_transfer(self, obs, acts,rews, params, infos=None):
+        keys = list(acts.keys())
+        transfers = {}
+        non_participating = []
+        for i in range(len(keys)):
+            x = np.random.rand()
+            if x<self.alpha:
+                non_participating.append(keys[i]) 
+            # if low apples locally and ate an apple
+            if infos[keys[i]]['feature_obs'][8] < 4 and infos[keys[i]]['eaten_close_apples'] > 0:
+                transfers[keys[i]] = params[keys[i]][0]  # strong negative consumption penalty
+            else:
+                transfers[keys[i]] = 0
+        return transfers, non_participating
+    
+class CleanupNoise(Contract):
+    """
+    A contract space for a multi-agent Cleanup environment.
+
+    Contracts are parameterized by theta in [0, 0.2], which correspond to a payment per waste cell cleaned, paid for evenly by the other agents. 
+
+    Parameters:
+        num_agents (int): The number of agents in the environment.
+        low_val (float, optional): The lower bound for the transfer values. Default is 0.
+        high_val (float, optional): The upper bound for the transfer values. Default is 0.2.
+
+    """ 
+    def __init__(self, num_agents,low_val=0,high_val=0.2,alpha=0):
+        super().__init__(gym.spaces.Box(shape=(1,), low=low_val, high=high_val), np.array([0.0]), num_agents)
+        self.alpha = alpha
+        
+    def compute_transfer(self, obs, acts,rews, params, infos=None):
+        keys = list(acts.keys())
+        transfers = {}
+        non_participating = []
+        for i in range(len(keys)):
+            x = np.random.rand()
+            if x<self.alpha:
+                non_participating.append(keys[i]) 
+            transfers[keys[i]] = - params[keys[i]][0] * infos[keys[i]]['cleaned_squares']
+        return transfers,non_participating
