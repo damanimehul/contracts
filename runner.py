@@ -124,6 +124,8 @@ if __name__ =='__main__' :
     for config in config_dict_list:
         if 'experiment_name' not in config:
             config['experiment_name'] = config['environment'] + '-' + str(config['num_agents'])+'agents'
+        else :
+            config['experiment_name'] += '-' + str(config['num_agents'])+'agents'
 
     # Generating new identical configs with the number of seeds specified
     # seed multiplier 

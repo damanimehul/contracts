@@ -82,6 +82,7 @@ def parse_arguments_dict(experiment_name, arg_dict):
 
     params_dict = {
         'contract': contract_selection,   # Which contract fn to use
+        'contract_params': contract_params,
         'base_env': base_env,             # Base environment (should be created above)
         'base_env_tag': base_env_tag,     # Base environment tag (should be created above)
         'exp_name': exp_name,             # Experiment name

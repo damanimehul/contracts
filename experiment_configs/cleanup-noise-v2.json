@@ -1,0 +1,44 @@
+[{
+    "num_workers": 16,
+    "num_timesteps": 15000000,
+    "batch_size": 64000,
+    "horizon": 1000,
+    "env_args": {
+    "image_obs": true
+    },
+    "model_params":{
+      "custom_model":"v1",
+      "post_fcnet_hiddens": [64,64]
+      ,"conv_filters":[[6,[3,3],1]]
+    },
+    "wandb":true,
+    "solver": true, 
+    "solver_samples":100
+    },
+    {"num_agents":[8,4,2] },
+    {
+      "environment": "cleanup_new",
+      "contract": "CleanupNoisev2", 
+      "experiment_name": "cleanup-alpha-0.25",
+      "contract_params":{"alpha":0.25}
+    },
+    {
+      "environment": "cleanup_new",
+      "contract": "CleanupNoisev2", 
+      "experiment_name": "cleanup-alpha-0.5",
+      "contract_params":{"alpha":0.5}
+    },
+    {
+      "environment": "cleanup_new",
+      "contract": "CleanupNoisev2", 
+      "experiment_name": "cleanup-alpha-0.75",
+      "contract_params":{"alpha":0.75}
+    },
+    {
+      "environment": "cleanup_new",
+      "contract": "CleanupNoisev2", 
+      "experiment_name": "cleanup-alpha-0.95",
+      "contract_params":{"alpha":0.95}
+    }
+  
+  ]

@@ -1,0 +1,2 @@
+CUDA_VISIBLE_DEVICES=0 python runner.py --name "harvest-noise-v3" --config_path "experiment_configs/harvest-noise-v2.json" --w_per_job 16 --workers 80 --mp --gpu 
+CUDA_VISIBLE_DEVICES=0 python runner.py --name "cleanup-noise-v3" --config_path "experiment_configs/cleanup-noise-v2.json" --w_per_job 16 --workers 80 --mp --gpu 
