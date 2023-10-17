@@ -67,7 +67,9 @@ def run_solver(params_dict,checkpoint_paths,logger):
             logger.simple_log(log_dict)
             all_rewards.append(ep_rewards)
             all_contracts.append(contract_param) 
-        logger.simple_log({'mean reward':np.mean(all_rewards),'mean contract':np.mean(all_contracts),
-                            'std reward':np.std(all_rewards),'std contract':np.std(all_contracts)})
-    time.sleep(300) # wait for logger to finish writing 
+
+        print('Logged Mean Reward',np.mean(all_rewards) )
+        final_reward_dict = {'final_mean_reward':np.mean(all_rewards),'final_mean_contract':np.mean(all_contracts),
+                            'std reward':np.std(all_rewards),'std contract':np.std(all_contracts)}
+        logger.simple_log(final_reward_dict)
     print('Finished Stage 2')
