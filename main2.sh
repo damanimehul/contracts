@@ -1,2 +1,2 @@
-CUDA_VISIBLE_DEVICES=1 python runner.py --name "harvest-noise-nobound-v2" --config_path "experiment_configs/harvest-noise-nobound.json" --w_per_job 16 --workers 80 --mp --gpu --seeds 3
-CUDA_VISIBLE_DEVICES=1 python runner.py --name "cleanup-noise-nobound-v2" --config_path "experiment_configs/cleanup-noise-nobound.json" --w_per_job 16 --workers 80 --mp --gpu --seeds 3 
+CUDA_VISIBLE_DEVICES=1 python runner.py --name "harvest-noise-nobound-v3" --config_path "experiment_configs/harvest-noise-nobound-v2.json" --w_per_job 16 --workers 80 --mp --gpu --seeds 2
+CUDA_VISIBLE_DEVICES=1 python runner.py --name "cleanup-noise-nobound-v2" --config_path "experiment_configs/cleanup-noise-nobound-v2.json" --w_per_job 16 --workers 80 --mp --gpu --seeds 2 
