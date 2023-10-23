@@ -24,7 +24,6 @@ def run_solver(params_dict,checkpoint_paths,logger):
         train_config = copy.deepcopy(trainer_config) 
         train_config['num_workers'] = 1
         train_config['evaluation_num_workers'] = 0
-        train_config['num_gpus'] = 0
 
         if train_config.get('stop_cond') :
             del train_config['stop_cond']
