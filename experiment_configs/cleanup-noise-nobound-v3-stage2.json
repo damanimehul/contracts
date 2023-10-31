@@ -1,0 +1,34 @@
+[{
+    "num_workers": 1,
+    "num_timesteps": 15000000,
+    "batch_size": 64000,
+    "horizon": 1000,
+    "env_args": {
+    "image_obs": true,
+    "decision_rule": "max"
+    },
+    "model_params":{
+      "custom_model":"v1",
+      "post_fcnet_hiddens": [64,64]
+      ,"conv_filters":[[6,[3,3],1]]
+    },
+    "wandb":true,
+    "solver": true, 
+    "solver_samples":100,
+    "second_stage_only":true 
+    },
+    {"num_agents":[8,4,2] },
+    {
+      "environment": "cleanup_new",
+      "contract": "CleanupNoisev3", 
+      "experiment_name": "cleanup-alpha-0",
+      "contract_params":{"alpha":0}
+    },
+    { 
+      "environment": "cleanup_new",
+      "contract": "CleanupNoisev3", 
+      "experiment_name": "cleanup-alpha-1",
+      "contract_params":{"alpha":1}
+    }
+  
+  ]
